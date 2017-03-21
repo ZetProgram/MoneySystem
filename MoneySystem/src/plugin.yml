@@ -1,0 +1,10 @@
+name: MoneySystem
+
+version: 1.0
+author: Zet
+
+main: de.moneysystem.Main
+
+commands:
+   money:
+   bank:
