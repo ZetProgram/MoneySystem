@@ -10,18 +10,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.moneysystem.Main;
 import de.moneysystem.user.UserGeldBörse;
-import net.minecraft.server.v1_11_R1.EntityEvoker.e;
 
 public class Bank implements Listener {
 
@@ -59,7 +56,7 @@ public class Bank implements Listener {
 
 			if (v.getCustomName().equals("Bank")) {
 				e.setCancelled(true);
-				
+
 				setInventory(p);
 
 			}
@@ -68,12 +65,18 @@ public class Bank implements Listener {
 	}
 
 	@EventHandler
-	public void onVillagerKill(EntityDamageEvent e) {
-
+	public void onVillagerKill(EntityDamageByEntityEvent e) {
+		Player p = (Player) e.getDamager();
 		if (e.getEntityType() == EntityType.VILLAGER) {
+			if (p.isOp()) {
 
-			if (e.getEntity().getName() == "Bank") {
-				e.setCancelled(true);
+				if (e.getEntity().getName() == "Bank") {
+					e.setCancelled(false);
+				}
+			} else {
+				if (e.getEntity().getName() == "Bank") {
+					e.setCancelled(true);
+				}
 			}
 
 		}
