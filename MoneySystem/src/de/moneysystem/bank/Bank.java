@@ -59,7 +59,7 @@ public class Bank implements Listener {
 
 			if (v.getCustomName().equals("Bank")) {
 				e.setCancelled(true);
-
+				
 				setInventory(p);
 
 			}
