@@ -41,6 +41,18 @@ public class Bank implements Listener {
 		UserKontoBank.safekontocfg();
 
 	}
+	
+	public static Boolean hasKonto(Player p) {
+		boolean haskonto = false;
+		
+		if (Main.getUserGeldcfg().contains(String.valueOf(p.getUniqueId()))) {
+			
+			haskonto = true;
+			
+		}
+			
+		return haskonto;
+	}
 
 	public static Integer getKontoGeld(Player p) {
 
@@ -70,15 +82,17 @@ public class Bank implements Listener {
 		if (e.getEntityType() == EntityType.VILLAGER) {
 			if (p.isOp()) {
 
-				if (e.getEntity().getName() == "Bank") {
+				if (e.getEntity().getName().equals("Bank")) {
 					e.setCancelled(false);
 				}
 			} else {
-				if (e.getEntity().getName() == "Bank") {
+				
+				if (e.getEntity().getName().equals("Bank")) {
 					e.setCancelled(true);
 				}
 			}
-
+		} else {
+			e.setCancelled(false);
 		}
 	}
 

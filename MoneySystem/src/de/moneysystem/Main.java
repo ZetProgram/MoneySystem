@@ -2,13 +2,13 @@ package de.moneysystem;
 
 import java.io.File;
 
-import org.bukkit.command.defaults.ReloadCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Villager.Profession;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.moneysystem.bank.Bank;
 import de.moneysystem.bank.UserKontoBank;
+import de.moneysystem.cmd.Commands;
 import de.moneysystem.user.UserGeldBörse;
 
 
@@ -39,12 +39,6 @@ public class Main extends JavaPlugin{
 	}
 	
 	public void loadFiles() {
-		
-//		if (this.getServer().getPluginManager().getPlugin("PermissionsEx") == null) {
-//			
-//			getServer().getConsoleSender().sendMessage("§c[MoneySystem] PermissionsEx missed!");
-//			
-//		}
 		
 		createConfig();
 		
