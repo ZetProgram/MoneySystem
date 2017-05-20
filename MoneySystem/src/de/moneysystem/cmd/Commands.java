@@ -23,42 +23,70 @@ public class Commands implements CommandExecutor {
 		if (cmd.getName().equalsIgnoreCase("money")) {
 
 			if (args.length == 0) {
-				
+
 				p.sendMessage(ChatColor.GREEN + "[Beutel] Du hast " + ChatColor.GOLD + UserGeldBörse.getGeldbörse(p) + "$");
 				return true;
-				
+
 			}
 
 		}
 		if (p.isOp()) {
+
 			if (cmd.getName().equalsIgnoreCase("bank")) {
 
-				if (args.length == 1) {
+				if (args.length == 2) {
 
 					if (args[0].equalsIgnoreCase("set")) {
 
-						try {
-							Profession profession = Profession.valueOf((String) Main.getInstance().getConfig().get("Bank.VillagerType"));
-							Villager v = (Villager) p.getWorld().spawnEntity(p.getLocation(), EntityType.VILLAGER);
-							v.setProfession(profession);
+						if (args[1].equalsIgnoreCase("bank")) {
 
-							v.setCustomName("Bank");
-							v.setCustomNameVisible(true);
+							try {
 
-							v.setCanPickupItems(false);
+								Profession profession = Profession.valueOf((String) Main.getInstance().getConfig().get("Bank.VillagerType"));
+								Villager v = (Villager) p.getWorld().spawnEntity(p.getLocation(), EntityType.VILLAGER);
+								v.setProfession(profession);
 
-							v.addPotionEffect(PotionEffectType.SLOW.createEffect(Integer.MAX_VALUE, 100));
+								v.setCustomName("Bank");
+								v.setCustomNameVisible(true);
 
-							p.sendMessage("§a[Bank] Ein Bänker wurde gesetzt!");
-							return true;
-						} catch (Exception e) {
-							p.sendMessage("§a[Bank] §4ERROR: §cBitte überprüfe deine Eingabe in der §6config.yml\n");
-							p.sendMessage("§f[INFO] §6Pfad: §cBank/VillagerType");
-							return true;
+								v.setCanPickupItems(false);
+
+								v.addPotionEffect(PotionEffectType.SLOW.createEffect(Integer.MAX_VALUE, 100));
+
+								p.sendMessage("§a[Bank] Ein Bänker wurde gesetzt!");
+								return true;
+
+							} catch (Exception e) {
+								p.sendMessage("§a[Bank] §4ERROR: §cBitte überprüfe deine Eingabe in der §6config.yml\n");
+								p.sendMessage("§f[INFO] §6Pfad: §cBank/VillagerType");
+								return true;
+							}
 						}
 
-					}
+						if (args[1].equalsIgnoreCase("bankexperte")) {
+							try {
+								Profession profession = Profession.valueOf((String) Main.getInstance().getConfig().get("Bankexperte.VillagerType"));
+								Villager v = (Villager) p.getWorld().spawnEntity(p.getLocation(), EntityType.VILLAGER);
+								v.setProfession(profession);
 
+								v.setCustomName("Bankexperte");
+								v.setCustomNameVisible(true);
+
+								v.setCanPickupItems(false);
+
+								v.addPotionEffect(PotionEffectType.SLOW.createEffect(Integer.MAX_VALUE, 100));
+
+								p.sendMessage("§a[Bank] Ein Bankexperte wurde gesetzt!");
+								return true;
+
+							} catch (Exception e) {
+								p.sendMessage("§a[Bank] §4ERROR: §cBitte überprüfe deine Eingabe in der §6config.yml\n");
+								p.sendMessage("§f[INFO] §6Pfad: §cBankexperte/VillagerType");
+								return true;
+							}
+
+						}
+					}
 				}
 			}
 		}

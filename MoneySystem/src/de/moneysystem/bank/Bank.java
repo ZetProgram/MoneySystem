@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -17,46 +18,20 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.moneysystem.Main;
+import de.moneysystem.MySQL;
 import de.moneysystem.user.UserGeldBörse;
 
 public class Bank implements Listener {
 
 	int money;
 
-	public static void addMoney(int money, Player p) {
 
-		int hatmoney = Main.getBankcfg().getInt(p.getUniqueId() + ".Money");
-		int endmoney = hatmoney + money;
-		Main.getBankcfg().set(p.getUniqueId() + ".Money", endmoney);
-		UserKontoBank.safekontocfg();
-
-	}
 
 	public static void addKonto(UUID uuid, Player p) {
 
 		UserKontoBank.bankcfg.set(p.getUniqueId() + ".Name", p.getName());
-		UserKontoBank.bankcfg.set(p.getUniqueId() + ".Money", 500.00);
 		UserKontoBank.bankcfg.options().copyDefaults(true);
 		UserKontoBank.safekontocfg();
-
-	}
-	
-	public static Boolean hasKonto(Player p) {
-		boolean haskonto = false;
-		
-		if (Main.getUserGeldcfg().contains(String.valueOf(p.getUniqueId()))) {
-			
-			haskonto = true;
-			
-		}
-			
-		return haskonto;
-	}
-
-	public static Integer getKontoGeld(Player p) {
-
-		return UserKontoBank.bankcfg.getInt(p.getUniqueId() + ".Money");
 
 	}
 
@@ -68,10 +43,19 @@ public class Bank implements Listener {
 
 			if (v.getCustomName().equals("Bank")) {
 				e.setCancelled(true);
+				if (MySQL.hasKonto(p.getUniqueId())) {
 
-				setInventory(p);
+					setInventory(p);
 
+				} else {
+
+					e.setCancelled(true);
+					p.closeInventory();
+					p.sendMessage(ChatColor.RED + "Du besitzt noch kein Bank Konto, erstelle dir eins bei dem Bankexperten!");
+
+				}
 			}
+
 		}
 
 	}
@@ -86,7 +70,7 @@ public class Bank implements Listener {
 					e.setCancelled(false);
 				}
 			} else {
-				
+
 				if (e.getEntity().getName().equals("Bank")) {
 					e.setCancelled(true);
 				}
@@ -102,13 +86,12 @@ public class Bank implements Listener {
 		Player p = (Player) e.getWhoClicked();
 
 		if (e.getCurrentItem() != null && e.getClickedInventory() != null) {
+
 			if (e.getClickedInventory().getName().equals("§2Bank")) {
-
 				e.setCancelled(true);
+				double userbeutel = UserGeldBörse.getGeldbörse(p);
 
-				int userbeutel = UserGeldBörse.getGeldbörse(p);
-
-				int userbank = UserKontoBank.getBankGeld(p);
+				double userbank = UserKontoBank.getKontoGeld(p);
 
 				if (e.isLeftClick()) {
 
@@ -227,12 +210,13 @@ public class Bank implements Listener {
 
 					}
 				}
-
 			}
+
 		}
+
 	}
 
-	public void setInventory(Player p) {
+	private void setInventory(Player p) {
 
 		Inventory inv = p.getServer().createInventory(null, 9, "§2Bank");
 
@@ -287,7 +271,7 @@ public class Bank implements Listener {
 
 		ItemMeta bankmeta = bank.getItemMeta();
 
-		bankmeta.setDisplayName("§aBank: §c" + UserKontoBank.getBankGeld(p) + "$");
+		bankmeta.setDisplayName("§aBank: §c" + UserKontoBank.getKontoGeld(p) + "$");
 
 		bank.setItemMeta(bankmeta);
 
